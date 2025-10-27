@@ -372,3 +372,183 @@ body, html {
         font-size: 1.1rem;
     }
 }
+
+/* 📱 Mejora de Responsividad General */
+@media (max-width: 1024px) {
+  #intro h1 {
+    font-size: 4.5rem;
+    letter-spacing: 8px;
+  }
+
+  #intro p {
+    font-size: 1.6rem;
+  }
+
+  #intro .event-date {
+    font-size: 2.2rem;
+  }
+
+  .enter-btn {
+    font-size: 1.4rem;
+    padding: 14px 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  #intro {
+    padding: 2rem 1rem;
+  }
+
+  #intro h1 {
+    font-size: 3.2rem;
+    letter-spacing: 5px;
+    line-height: 1.2;
+  }
+
+  #intro p {
+    font-size: 1.2rem;
+  }
+
+  #intro .event-date {
+    font-size: 1.8rem;
+  }
+
+  .enter-btn {
+    font-size: 1.2rem;
+    padding: 12px 40px;
+    letter-spacing: 2px;
+  }
+
+  /* Hero Section */
+  #hero h1 {
+    font-size: 3rem;
+  }
+
+  #hero .subtitle {
+    font-size: 1.8rem !important;
+    margin-bottom: 30px !important;
+  }
+
+  #hero p {
+    font-size: 1rem;
+  }
+
+  /* Countdown */
+  #countdown {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  #countdown div {
+    width: 80px;
+  }
+
+  /* Gallery */
+  .carousel-slide img {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  #intro h1 {
+    font-size: 2.3rem;
+    letter-spacing: 2px;
+  }
+
+  #intro p {
+    font-size: 1rem;
+  }
+
+  #intro .event-date {
+    font-size: 1.4rem;
+  }
+
+  .enter-btn {
+    font-size: 1rem;
+    padding: 10px 35px;
+  }
+
+  /* Hero Section */
+  #hero h1 {
+    font-size: 2rem;
+  }
+
+  #hero .subtitle {
+    font-size: 1.3rem !important;
+  }
+
+  #hero p {
+    font-size: 0.9rem;
+  }
+
+  /* Mapa */
+  #location iframe {
+    height: 300px !important;
+  }
+
+  /* Botón de música */
+  #music-toggle {
+    width: 40px !important;
+    height: 40px !important;
+    bottom: 15px !important;
+    right: 15px !important;
+  }
+
+  /* Testimonios */
+  .text-gray-300 {
+    font-size: 0.9rem;
+  }
+}
+
+/* 📱 Carrusel Responsive y táctil */
+.carousel-container {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+}
+
+@media (min-width: 640px) {
+  .carousel-slide {
+    flex: 0 0 50%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .carousel-slide {
+    flex: 0 0 33.333%;
+  }
+}
+
+/* Ocultar scroll horizontal pero mantener la funcionalidad táctil */
+.carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 🔘 Mejora de botones para móviles */
+.carousel-prev,
+.carousel-next {
+  width: 45px;
+  height: 45px;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .carousel-prev,
+  .carousel-next {
+    display: none; /* Oculta botones en móviles: se usa swipe */
+  }
+}

@@ -41,88 +41,93 @@ updateCountdown();
 
 // Carousel Functionality
 document.addEventListener('DOMContentLoaded', function() {
-    const track = document.querySelector('.carousel-track');
-    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
-    const dots = Array.from(document.querySelectorAll('.carousel-dot'));
-    const nextButton = document.querySelector('.carousel-next');
-    const prevButton = document.querySelector('.carousel-prev');
-    
-    let slideWidth = slides[0].getBoundingClientRect().width;
-    let currentIndex = 0;
-    
-    // Arrange slides next to each other
-    const setSlidePosition = (slide, index) => {
-        slide.style.left = slideWidth * index + 'px';
-    };
+  const track = document.querySelector('.carousel-track');
+  const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+  const dots = Array.from(document.querySelectorAll('.carousel-dot'));
+  const nextButton = document.querySelector('.carousel-next');
+  const prevButton = document.querySelector('.carousel-prev');
+  const container = document.querySelector('.carousel-container');
+
+  let slideWidth = slides[0].getBoundingClientRect().width;
+  let currentIndex = 0;
+
+  // Set slide positions
+  const setSlidePosition = (slide, index) => {
+    slide.style.left = slideWidth * index + 'px';
+  };
+  slides.forEach(setSlidePosition);
+
+  // Resize handler
+  window.addEventListener('resize', () => {
+    slideWidth = slides[0].getBoundingClientRect().width;
     slides.forEach(setSlidePosition);
-    
-    // Update carousel on resize
-    window.addEventListener('resize', () => {
-        slideWidth = slides[0].getBoundingClientRect().width;
-        slides.forEach(setSlidePosition);
-        moveToSlide(currentIndex);
-    });
-    
-    // Move to specific slide
-    const moveToSlide = (index) => {
-        track.style.transform = 'translateX(-' + slideWidth * index + 'px)';
-        updateDots(index);
-        currentIndex = index;
-    };
-    
-    // Update active dot
-    const updateDots = (index) => {
-        dots.forEach(dot => dot.classList.remove('bg-orange-500'));
-        dots[index].classList.add('bg-orange-500');
-    };
-    
-    // Click next button
+    moveToSlide(currentIndex);
+  });
+
+  // Move function
+  const moveToSlide = (index) => {
+    track.style.transform = 'translateX(-' + slideWidth * index + 'px)';
+    updateDots(index);
+    currentIndex = index;
+  };
+
+  // Update active dot
+  const updateDots = (index) => {
+    dots.forEach(dot => dot.classList.remove('bg-orange-500'));
+    if (dots[index]) dots[index].classList.add('bg-orange-500');
+  };
+
+  // Buttons
+  if (nextButton && prevButton) {
     nextButton.addEventListener('click', () => {
-        if (currentIndex === slides.length - 1) return;
-        currentIndex++;
-        moveToSlide(currentIndex);
+      if (currentIndex < slides.length - 1) moveToSlide(currentIndex + 1);
     });
-    
-    // Click prev button
+
     prevButton.addEventListener('click', () => {
-        if (currentIndex === 0) return;
-        currentIndex--;
-        moveToSlide(currentIndex);
+      if (currentIndex > 0) moveToSlide(currentIndex - 1);
     });
-    
-    // Click on dots
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            moveToSlide(index);
-        });
-    });
-    
-    // Auto-advance carousel
-    let autoSlide = setInterval(() => {
-        if (currentIndex === slides.length - 1) {
-            moveToSlide(0);
-        } else {
-            moveToSlide(currentIndex + 1);
-        }
-    }, 5000);
-    
-    // Pause on hover
-    track.addEventListener('mouseenter', () => {
-        clearInterval(autoSlide);
-    });
-    
-    track.addEventListener('mouseleave', () => {
-        autoSlide = setInterval(() => {
-            if (currentIndex === slides.length - 1) {
-                moveToSlide(0);
-            } else {
-                moveToSlide(currentIndex + 1);
-            }
-        }, 5000);
-    });
-    
-    // Initialize dots
-    updateDots(0);
+  }
+
+  // 📱 Swipe (Touch) Support
+  let startX = 0;
+  let endX = 0;
+
+  container.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  container.addEventListener('touchend', (e) => {
+    endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+
+    if (Math.abs(diff) > 50) { // Mínimo desplazamiento
+      if (diff > 0 && currentIndex < slides.length - 1) {
+        moveToSlide(currentIndex + 1);
+      } else if (diff < 0 && currentIndex > 0) {
+        moveToSlide(currentIndex - 1);
+      }
+    }
+  });
+
+  // Auto-advance
+  let autoSlide = setInterval(() => {
+    if (currentIndex === slides.length - 1) {
+      moveToSlide(0);
+    } else {
+      moveToSlide(currentIndex + 1);
+    }
+  }, 6000);
+
+  // Pause on hover
+  container.addEventListener('mouseenter', () => clearInterval(autoSlide));
+  container.addEventListener('mouseleave', () => {
+    autoSlide = setInterval(() => {
+      if (currentIndex === slides.length - 1) moveToSlide(0);
+      else moveToSlide(currentIndex + 1);
+    }, 6000);
+  });
+
+  updateDots(0);
     
     // Form Submission
     const rsvpForm = document.getElementById('rsvpForm');
