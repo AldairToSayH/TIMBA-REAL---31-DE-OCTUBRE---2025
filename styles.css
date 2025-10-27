@@ -1,0 +1,74 @@
+/* Custom Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Creepster&display=swap');
+
+.font-bangers {
+    font-family: 'Bangers', cursive;
+}
+
+.font-creepster {
+    font-family: 'Creepster', cursive;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a202c;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #7c3aed;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6d28d9;
+}
+
+/* Carousel Styles */
+.carousel-track {
+    transition: transform 0.5s ease;
+}
+
+.carousel-slide {
+    transition: opacity 0.5s ease;
+}
+
+/* Animation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Form Input Focus */
+input:focus, select:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3);
+}
+
+/* Custom Shadows */
+.shadow-orange-500\/30 {
+    box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.3), 0 4px 6px -4px rgba(249, 115, 22, 0.3);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .carousel-slide {
+        min-width: 50%;
+    }
+}
+
+@media (max-width: 640px) {
+    .carousel-slide {
+        min-width: 100%;
+    }
+}
