@@ -428,60 +428,127 @@
     </script>
 <!-- 🔊 Música de fondo -->
 <audio id="bg-music" loop>
-    <source src="music/Gata celosa x Cholo Juanito.mp3" type="audio/mpeg">
-    Tu navegador no soporta el elemento de audio.
-  </audio>
-  
-  <!-- Botón para controlar la música -->
-  <div id="music-toggle"
-       style="position: fixed;
-              bottom: 20px;
-              right: 20px;
-              background: rgba(0, 0, 0, 0.6);
-              border: 2px solid rgba(255, 107, 0, 0.8);
-              color: #fff;
-              width: 50px;
-              height: 50px;
-              border-radius: 50%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              cursor: pointer;
-              z-index: 1000;
-              box-shadow: 0 0 15px rgba(255,107,0,0.5);">
+    <!-- Las fuentes se cargarán dinámicamente -->
+</audio>
+
+<!-- Botón para controlar la música -->
+<div id="music-toggle"
+     style="position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 107, 0, 0.8);
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 0 15px rgba(255,107,0,0.5);">
     <i class="fas fa-volume-up"></i>
-  </div>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-  <script>
-    const music = document.getElementById("bg-music");
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<script>
+    // Lista de canciones disponibles
+    const songs = [
+        'music/Gata celosa x Cholo Juanito.mp3',
+        'music/Down (mp3cut.net).mp3',
+        'music/me tientas.mp3',
+        'music/bienpa.mp3',
+        'music/ProjectQuispe.mp3'
+    ];
+
+    // Función para seleccionar una canción aleatoria
+    function getRandomSong() {
+        // Obtener la última canción reproducida
+        const lastSong = localStorage.getItem('lastPlayedSong');
+        
+        // Filtrar canciones disponibles (excluir la última)
+        const availableSongs = songs.filter(song => song !== lastSong);
+        
+        // Si no hay canciones disponibles, usar todas
+        const songPool = availableSongs.length > 0 ? availableSongs : songs;
+        
+        const randomIndex = Math.floor(Math.random() * songPool.length);
+        const selectedSong = songPool[randomIndex];
+        
+        // Guardar la canción actual
+        localStorage.setItem('lastPlayedSong', selectedSong);
+        
+        return selectedSong;
+    }
+
+    // Función para configurar el audio
+    function setupAudio() {
+        const music = document.getElementById("bg-music");
+        const randomSong = getRandomSong();
+        
+        // Limpiar fuentes existentes y agregar nueva
+        music.innerHTML = '';
+        const source = document.createElement('source');
+        source.src = randomSong;
+        source.type = 'audio/mpeg';
+        music.appendChild(source);
+        
+        // Agregar mensaje de fallback
+        const fallbackText = document.createTextNode('Tu navegador no soporta el elemento de audio.');
+        music.appendChild(fallbackText);
+        
+        // Recargar el audio
+        music.load();
+        
+        console.log('Reproduciendo:', randomSong);
+        
+        return music;
+    }
+
+    // Inicializar música
+    let music = setupAudio();
     const toggle = document.getElementById("music-toggle");
     let playing = false;
-  
+
     // Intentar reproducir música al interactuar con la página
     document.addEventListener("click", () => {
-      if (!playing) {
-        music.play().then(() => {
-          playing = true;
-        }).catch(() => {
-          console.log("Autoplay bloqueado por el navegador.");
-        });
-      }
+        if (!playing) {
+            music.play().then(() => {
+                playing = true;
+            }).catch((error) => {
+                console.log("Autoplay bloqueado por el navegador:", error);
+            });
+        }
     }, { once: true });
-  
+
     // Control de encendido/apagado
     toggle.addEventListener("click", () => {
-      if (playing) {
-        music.pause();
-        toggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
-      } else {
-        music.play();
-        toggle.innerHTML = '<i class="fas fa-volume-up"></i>';
-      }
-      playing = !playing;
+        if (playing) {
+            music.pause();
+            toggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        } else {
+            music.play().catch((error) => {
+                console.log("Error al reproducir:", error);
+            });
+            toggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+        }
+        playing = !playing;
     });
-  </script>
-  
+
+    // Manejar errores de carga de audio
+    music.addEventListener('error', function(e) {
+        console.error('Error cargando la canción:', music.src);
+        // Recargar con una canción diferente
+        setTimeout(() => {
+            music = setupAudio();
+            if (playing) {
+                music.play().catch(error => console.log("Error al reintentar:", error));
+            }
+        }, 1000);
+    });
+</script>
+
 </body>
 <style>
     @keyframes bobbing {
